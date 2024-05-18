@@ -81,14 +81,14 @@ async function bankservice(bank:Bank) {
             }
         }
         if(service.opption === "Cash WithDraw"){
-            let balanceView = await inquirer.prompt(
+            let withdarw = await inquirer.prompt(
                 {
                     name:"balance",
                     type:"number",
                     message:"Enter your Account No:"
                 }
             )
-            let account = myBank.account.find((acc) => acc.accountNumber == balanceView.balance)
+            let account = myBank.account.find((acc) => acc.accountNumber == withdarw.balance)
             if(!account){
                 console.log(chalk.red.bold("Incorrect Acount number:"))
             }
@@ -100,34 +100,37 @@ async function bankservice(bank:Bank) {
                 });
                 
                 let nbalance = account.balance - ans.withdraw
-                bank.transfer({name:account.name,accountNumber:account.accountNumber,balance:nbalance})
+                myBank.transfer({name:account.name,accountNumber:account.accountNumber,balance:nbalance})
                
                if(account.balance < ans.withdraw){
                 console.log(chalk.red.bold("insufficint balance"))
                 }
+                else{
+                    console.log(chalk.green.bold("You successfully Withdraw amount"))
+                }
             }
         }
         if(service.opption === "Cash Deposit"){
-            let balanceView = await inquirer.prompt(
+            let deposit = await inquirer.prompt(
                 {
-                    name:"balance",
+                    name:"deposit",
                     type:"number",
                     message:"Enter your Account No:"
                 }
             )
-            let account = myBank.account.find((acc) => acc.accountNumber == balanceView.balance)
+            let account = myBank.account.find((acc) => acc.accountNumber == deposit.deposit)
             if(!account){
                 console.log(chalk.red.bold("Incorrect Acount number:"))
             }
             if(account){
                 let ans = await inquirer.prompt(
                     {
-                        name:"withdraw",
+                        name:"deposit",
                         type:"number",
                         message:"Enter your Amount to cash deposit:"
                     }
                 )
-                let nbalance = account.balance + ans.withdraw
+                let nbalance = account.balance + ans.deposit
                 bank.transfer({name:account.name,accountNumber:account.accountNumber,balance:nbalance})
                 console.log(`you successfully deposit your amount your new blance is:$${chalk.blue.bold(nbalance)}`)
             }
